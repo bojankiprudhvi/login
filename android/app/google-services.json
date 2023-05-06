@@ -1,0 +1,39 @@
+{
+    "project_info": {
+      "project_number": "441201721148",
+      "project_id": "memorify-prudhvi",
+      "storage_bucket": "memorify-prudhvi.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:441201721148:android:423eeb511b061ac2576839",
+          "android_client_info": {
+            "package_name": "com.memorify.app"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "441201721148-qq44kc652alebt3766l57g5q6e17isem.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyDqBU1HDMGUM4mlAUKWj34cpWFK6HCgrEQ"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "441201721148-qq44kc652alebt3766l57g5q6e17isem.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }
