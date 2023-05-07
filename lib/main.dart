@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           switch (snapshot.connectionState) {
             case ConnectionState.active:
               if (snapshot.hasData) {
-                return WelcomePage( uid: FirebaseAuth.instance.currentUser!.uid,);
+                return WelcomePage();
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text(snapshot.error.toString()),

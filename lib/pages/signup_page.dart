@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:login/auth_controller.dart';
+import 'package:login/pages/profile_page.dart';
 import 'package:login/pages/welcome_page.dart';
 
 import '../utils/show_snackbar.dart';
@@ -23,7 +24,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-  var userNameController =TextEditingController();
+  var userNameController = TextEditingController();
   Uint8List? _image;
   bool isLoading = false;
   void selectImage() async {
@@ -32,6 +33,7 @@ class _SignUpPageState extends State<SignUpPage> {
       _image = bytesOfImage;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     List image = ["g.png", "f.png", "t.png"];
@@ -56,15 +58,16 @@ class _SignUpPageState extends State<SignUpPage> {
           );
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => WelcomePage(uid: FirebaseAuth.instance.currentUser!.uid,)),);
+            context,
+            MaterialPageRoute(builder: (context) => WelcomePage()),
+          );
         }
         setState(() {
           isLoading = false;
         });
       }
     }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -80,19 +83,20 @@ class _SignUpPageState extends State<SignUpPage> {
               height: height * 0.14,
             ),
             GestureDetector(
-              onTap: () {
-                selectImage();
-              },
-            child: _image != null
-                ? CircleAvatar(
-              backgroundColor: Colors.white70,
-              radius: 50,
-              backgroundImage: MemoryImage(_image!),
-            ): CircleAvatar(
-              backgroundColor: Colors.white70,
-              radius: 50,
-              backgroundImage: AssetImage("img/profile.png"),
-            )),
+                onTap: () {
+                  selectImage();
+                },
+                child: _image != null
+                    ? CircleAvatar(
+                        backgroundColor: Colors.white70,
+                        radius: 50,
+                        backgroundImage: MemoryImage(_image!),
+                      )
+                    : CircleAvatar(
+                        backgroundColor: Colors.white70,
+                        radius: 50,
+                        backgroundImage: AssetImage("img/profile.png"),
+                      )),
           ]),
         ),
         Container(
@@ -103,39 +107,39 @@ class _SignUpPageState extends State<SignUpPage> {
             SizedBox(
               height: 30,
             ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 10,
-                            offset: Offset(1, 1),
-                            color: Colors.grey.withOpacity(0.4))
-                      ]),
-                  child: TextField(
-                    controller: userNameController,
-                    decoration: InputDecoration(
-                        hintText: "User Name ",
-                        prefixIcon: Icon(
-                          Icons.person,
-                          color: Colors.deepOrangeAccent,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide:
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 10,
+                        offset: Offset(1, 1),
+                        color: Colors.grey.withOpacity(0.4))
+                  ]),
+              child: TextField(
+                controller: userNameController,
+                decoration: InputDecoration(
+                    hintText: "User Name ",
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: Colors.deepOrangeAccent,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide:
                             BorderSide(color: Colors.white, width: 1.0)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide:
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide:
                             BorderSide(color: Colors.white, width: 1.0)),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30))),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -209,8 +213,9 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         GestureDetector(
           onTap: () {
+            print("button presoded");
             signupUser();
-            },
+          },
           child: Container(
             width: width * 0.5,
             height: height * 0.08,
@@ -245,7 +250,7 @@ class _SignUpPageState extends State<SignUpPage> {
           text: "Sign up using one of the following methods",
           style: TextStyle(color: Colors.grey[500], fontSize: 16),
         )),*/
-       /* Wrap(
+        /* Wrap(
           children: List<Widget>.generate(3, (index) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
