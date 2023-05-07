@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">441201721148-qq44kc652alebt3766l57g5q6e17isem.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">441201721148</string>
+    <string name="google_api_key" translatable="false">AIzaSyDqBU1HDMGUM4mlAUKWj34cpWFK6HCgrEQ</string>
+    <string name="google_app_id" translatable="false">1:441201721148:android:423eeb511b061ac2576839</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDqBU1HDMGUM4mlAUKWj34cpWFK6HCgrEQ</string>
+    <string name="google_storage_bucket" translatable="false">memorify-prudhvi.appspot.com</string>
+    <string name="project_id" translatable="false">memorify-prudhvi</string>
+</resources>

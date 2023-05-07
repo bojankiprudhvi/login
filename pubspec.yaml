@@ -38,6 +38,10 @@ dependencies:
   get:
   firebase_auth: ^4.5.0
   firebase_core: ^2.11.0
+  image_picker: ^0.8.7+4
+  firebase_storage: ^11.0.13
+  cloud_firestore: ^4.4.2
+  uuid: ^3.0.7
 dev_dependencies:
   flutter_test:
     sdk: flutter

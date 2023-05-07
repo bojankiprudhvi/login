@@ -1,15 +1,78 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:login/auth_controller.dart';
+class WelcomePage extends StatefulWidget {
+  final String uid;
+  const WelcomePage({super.key,required this.uid});
 
-class WelcomePage extends StatelessWidget {
-  String email;
-  WelcomePage({super.key, required this.email});
   @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  @override
+  var userData = {};
+  bool isLoading = false;
+  var postLength = 0;
+  var followers = 0;
+  var following = 0;
+  bool isFollowing = false;
+
+  @override
+  void initState() {
+    // FirebaseAuth.instance.signOut();
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+    //  devtools.log(widget.uid);
+     // devtools.log(FirebaseAuth.instance.currentUser!.uid);
+      // Getting user's data
+      DocumentSnapshot<Map<String, dynamic>> getUserData =
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.uid)
+          .get();
+      setState(() {
+        userData = getUserData.data()!;
+        followers = getUserData.data()!["followers"].length;
+        following = getUserData.data()!["following"].length;
+        isFollowing = getUserData
+            .data()!["followers"]
+            .contains(FirebaseAuth.instance.currentUser!.uid);
+      });
+
+      // Getting posts length
+      QuerySnapshot<Map<String, dynamic>> getPostsLength =
+      await FirebaseFirestore.instance
+          .collection("posts")
+          .where("uid", isEqualTo: widget.uid)
+          .get();
+
+      setState(() {
+        postLength = getPostsLength.docs.length;
+      });
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+    //  devtools.log(e.toString());
+    }
+  }
+
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(children: [
@@ -26,7 +89,7 @@ class WelcomePage extends StatelessWidget {
             CircleAvatar(
               backgroundColor: Colors.white70,
               radius: 50,
-              backgroundImage: AssetImage("img/profile1.png"),
+              backgroundImage: NetworkImage(userData["photoUrl"]),
             )
           ]),
         ),
@@ -47,7 +110,11 @@ class WelcomePage extends StatelessWidget {
                     color: Colors.black54),
               ),
               Text(
-                email,
+                userData["username"],
+                style: TextStyle(fontSize: 18, color: Colors.grey[500]),
+              ),
+              Text(
+                userData["email"],
                 style: TextStyle(fontSize: 18, color: Colors.grey[500]),
               ),
             ],
