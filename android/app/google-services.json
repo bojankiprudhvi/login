@@ -1,39 +1,39 @@
 {
-    "project_info": {
-      "project_number": "441201721148",
-      "project_id": "memorify-prudhvi",
-      "storage_bucket": "memorify-prudhvi.appspot.com"
-    },
-    "client": [
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:441201721148:android:423eeb511b061ac2576839",
-          "android_client_info": {
-            "package_name": "com.memorify.app"
-          }
-        },
-        "oauth_client": [
-          {
-            "client_id": "441201721148-qq44kc652alebt3766l57g5q6e17isem.apps.googleusercontent.com",
-            "client_type": 3
-          }
-        ],
-        "api_key": [
-          {
-            "current_key": "AIzaSyDqBU1HDMGUM4mlAUKWj34cpWFK6HCgrEQ"
-          }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": [
-              {
-                "client_id": "441201721148-qq44kc652alebt3766l57g5q6e17isem.apps.googleusercontent.com",
-                "client_type": 3
-              }
-            ]
-          }
+  "project_info": {
+    "project_number": "1040318085390",
+    "project_id": "memorifynew",
+    "storage_bucket": "memorifynew.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040318085390:android:f56a00c0558cf8b8b77f5f",
+        "android_client_info": {
+          "package_name": "com.memorify.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1040318085390-4ld0bc7j7r5kqa448ql2ptqqne21cpjp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa5-OQpRJcTJtfeWNlpvS1C_T2r7IaqWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1040318085390-4ld0bc7j7r5kqa448ql2ptqqne21cpjp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
-    ],
-    "configuration_version": "1"
-  }
+    }
+  ],
+  "configuration_version": "1"
+}

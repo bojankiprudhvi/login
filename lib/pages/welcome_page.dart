@@ -1,84 +1,74 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:login/auth_controller.dart';
+import 'package:login/pages/login_page.dart';
+import 'package:login/pages/profile_page.dart';
+import 'package:login/pages/user_posts.dart';
+import 'package:login/pages/wish_list.dart';
 
-class WelcomePage extends StatelessWidget {
-  String email;
-  WelcomePage({super.key, required this.email});
+import 'package:login/pages/add_post.dart';
+import 'package:login/pages/feed_page.dart';
+
+class WelcomePage extends StatefulWidget {
+  const WelcomePage({super.key});
+
   @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+//return Scaffold();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(children: [
-        Container(
-          width: width,
-          height: height * 0.3,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("img/signup.png"), fit: BoxFit.fill)),
-          child: Column(children: [
-            SizedBox(
-              height: height * 0.14,
-            ),
-            CircleAvatar(
-              backgroundColor: Colors.white70,
-              radius: 50,
-              backgroundImage: AssetImage("img/profile1.png"),
-            )
-          ]),
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 20),
-          width: width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Welcome",
-                style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54),
-              ),
-              Text(
-                email,
-                style: TextStyle(fontSize: 18, color: Colors.grey[500]),
-              ),
-            ],
+      body: PageView(
+        children: [
+          FeedScreen(),
+          WishList(),
+          AddPostScreen(),
+          UserPostList(),
+          ProfilePage(
+            uid: FirebaseAuth.instance.currentUser!.uid,
           ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        height: height * 0.13,
+        decoration: BoxDecoration(
+            // borderRadius: BorderRadius.circular(30),
+            image: DecorationImage(
+                image: AssetImage("img/loginbtn.png"), fit: BoxFit.cover)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+          child: GNav(
+              //gap: 4,
+              //  backgroundColor: Colors.black,
+              iconSize: 50,
+              color: Colors.white,
+              activeColor: Colors.white,
+              tabBackgroundColor: Colors.grey.shade500,
+              hoverColor: Colors.grey.shade500,
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: "",
+                ),
+                GButton(icon: Icons.favorite_border, text: ""),
+                GButton(icon: Icons.add, text: ""),
+                GButton(
+                  icon: Icons.image,
+                  // text: " ",
+                ),
+                GButton(icon: Icons.person, text: ""),
+              ]),
         ),
-        SizedBox(
-          height: 200,
-        ),
-        GestureDetector(
-          onTap: () {
-            AuthController.instance.logout();
-          },
-          child: Container(
-            width: width * 0.5,
-            height: height * 0.08,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                image: DecorationImage(
-                    image: AssetImage("img/loginbtn.png"), fit: BoxFit.fill)),
-            child: Center(
-              child: Text(
-                "Sign out",
-                style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      ]),
+      ),
     );
   }
 }

@@ -1,12 +1,15 @@
 import 'dart:ffi';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:login/auth_controller.dart';
+import 'package:login/pages/profile_page.dart';
 import 'package:login/pages/signup_page.dart';
+import 'package:login/pages/welcome_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -131,6 +134,11 @@ class _LoginPageState extends State<LoginPage> {
           onTap: () {
             AuthController.instance.login(
                 emailController.text.trim(), passwordController.text.trim());
+            Navigator.popUntil(context, (route) => route.isFirst);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => WelcomePage()),
+            );
           },
           child: Container(
             width: width * 0.5,
