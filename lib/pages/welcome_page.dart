@@ -114,7 +114,34 @@ class _WelcomePageState extends State<WelcomePage> {
               });
             },
             child: AppBar(
-              title: Text('Hi Prudhvi'),
+              title: Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Row(children: <Widget>[
+                  GestureDetector(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white70,
+                      radius: 20,
+                      backgroundImage: Image.asset('img/signup.png').image,
+                    ),
+                    onTap: () {
+                      print("hai prudhvi ");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfilePage(
+                                  uid: FirebaseAuth.instance.currentUser!.uid,
+                                )),
+                      );
+
+                      setState(() {});
+                    },
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Hi Prudhvi'),
+                ]),
+              ),
               backgroundColor: AppColor, // Use the color variable
             ),
           ),
