@@ -22,6 +22,30 @@ class _LoginPageState extends State<LoginPage> {
   @override
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  var isLoading = false;
+
+  void loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    if (emailController != null && passwordController != null) {
+      final result = await AuthController.instance
+          .login(emailController.text.trim(), passwordController.text.trim());
+      if (result == "success") {
+        // ignore: use_build_context_synchronously
+
+        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => WelcomePage()),
+        );
+      } else {}
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -132,13 +156,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         GestureDetector(
           onTap: () {
-            AuthController.instance.login(
-                emailController.text.trim(), passwordController.text.trim());
-            Navigator.popUntil(context, (route) => route.isFirst);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => WelcomePage()),
-            );
+            loginUser();
           },
           child: Container(
             width: width * 0.5,
@@ -147,15 +165,21 @@ class _LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.circular(30),
                 image: DecorationImage(
                     image: AssetImage("img/loginbtn.png"), fit: BoxFit.fill)),
-            child: Center(
-              child: Text(
-                "Sign in",
-                style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ),
+            child: isLoading == false
+                ? Center(
+                    child: const Text(
+                      "Sign in",
+                      style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
           ),
         ),
         SizedBox(

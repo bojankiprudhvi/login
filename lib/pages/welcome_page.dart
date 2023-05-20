@@ -75,6 +75,13 @@ class WelcomePage extends StatefulWidget {
 
 */
 class _WelcomePageState extends State<WelcomePage> {
+  var userData = {};
+  var uid = FirebaseAuth.instance.currentUser!.uid;
+  bool isLoading = true;
+  var postLength = 0;
+  var followers = 0;
+  var following = 0;
+  bool isFollowing = false;
   int _counter = 0;
   bool isTravel = true;
   var AppColor = Colors.green;
@@ -92,95 +99,146 @@ class _WelcomePageState extends State<WelcomePage> {
     });
   }
 
+  void initState() {
+    // FirebaseAuth.instance.signOut();
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      //  devtools.log(widget.uid);
+      // devtools.log(FirebaseAuth.instance.currentUser!.uid);
+      // Getting user's data
+      DocumentSnapshot<Map<String, dynamic>> getUserData =
+          await FirebaseFirestore.instance.collection("users").doc(uid).get();
+      setState(() {
+        userData = getUserData.data()!;
+        followers = getUserData.data()!["followers"].length;
+        following = getUserData.data()!["following"].length;
+        isFollowing = getUserData
+            .data()!["followers"]
+            .contains(FirebaseAuth.instance.currentUser!.uid);
+      });
+
+      // Getting posts length
+      QuerySnapshot<Map<String, dynamic>> getPostsLength =
+          await FirebaseFirestore.instance
+              .collection("posts")
+              .where("uid", isEqualTo: uid)
+              .get();
+
+      setState(() {
+        postLength = getPostsLength.docs.length;
+      });
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      //  devtools.log(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: GestureDetector(
-            // Wrap the AppBar widget with GestureDetector
-            onDoubleTap: () {
-              // Handle double tap event
-              setState(() {
-                // Change the color of the app bar
-                if (isTravel) {
-                  AppColor = Colors.orange;
-                  isTravel = false;
-                } else {
-                  AppColor = Colors.green;
-                  isTravel = true;
-                }
-              });
-            },
-            child: AppBar(
-              title: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Row(children: <Widget>[
-                  GestureDetector(
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white70,
-                      radius: 20,
-                      backgroundImage: Image.asset('img/signup.png').image,
-                    ),
-                    onTap: () {
-                      print("hai prudhvi ");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePage(
-                                  uid: FirebaseAuth.instance.currentUser!.uid,
-                                )),
-                      );
+      home: isLoading == false
+          ? Scaffold(
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(50),
+                child: GestureDetector(
+                  // Wrap the AppBar widget with GestureDetector
+                  onDoubleTap: () {
+                    // Handle double tap event
+                    setState(() {
+                      // Change the color of the app bar
+                      if (isTravel) {
+                        AppColor = Colors.orange;
+                        isTravel = false;
+                      } else {
+                        AppColor = Colors.green;
+                        isTravel = true;
+                      }
+                    });
+                  },
+                  child: AppBar(
+                    title: Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(children: <Widget>[
+                        GestureDetector(
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white70,
+                            radius: 20,
+                            backgroundImage: NetworkImage(userData["photoUrl"]),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProfilePage(
+                                        uid: uid,
+                                      )),
+                            );
 
-                      setState(() {});
-                    },
+                            setState(() {});
+                          },
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          userData["username"],
+                        ),
+                      ]),
+                    ),
+                    backgroundColor: AppColor, // Use the color variable
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text('Hi Prudhvi'),
-                ]),
+                ),
               ),
-              backgroundColor: AppColor, // Use the color variable
+              body: Center(
+                child: _widgetOptions.elementAt(_selectedIndex),
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: AppColor,
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      //  title: Text('Home'),
+                      label: "FeedScreen",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.favorite),
+                      //  title: Text('Home'),
+                      label: "WishList",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.add),
+                      label: "AddPostScreen",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.list),
+                      //title: Text('Profile'),
+                      label: "UserPostList",
+                    ),
+                  ],
+                  //type: BottomNavigationBarType.shifting,
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: Colors.white,
+                  unselectedItemColor: Colors.black,
+                  iconSize: 40,
+                  onTap: _onItemTapped,
+                  type: BottomNavigationBarType.fixed,
+                  elevation: 5),
+            )
+          : const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
             ),
-          ),
-        ),
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: AppColor,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                //  title: Text('Home'),
-                label: "FeedScreen",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.favorite),
-                //  title: Text('Home'),
-                label: "WishList",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.add),
-                label: "AddPostScreen",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                //title: Text('Profile'),
-                label: "UserPostList",
-              ),
-            ],
-            //type: BottomNavigationBarType.shifting,
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.white,
-            unselectedItemColor: Colors.black,
-            iconSize: 40,
-            onTap: _onItemTapped,
-            type: BottomNavigationBarType.fixed,
-            elevation: 5),
-      ),
     );
   }
 }

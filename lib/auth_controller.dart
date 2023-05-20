@@ -30,6 +30,7 @@ class AuthController extends GetxController {
               Text(e.toString(), style: TextStyle(color: Colors.white)));
     }
   }
+
   // Signup User
   Future<String> signupUser({
     required BuildContext context,
@@ -46,7 +47,7 @@ class AuthController extends GetxController {
           file != null) {
         // registering user in auth with email and password
         UserCredential userCredentials =
-        await auth.createUserWithEmailAndPassword(
+            await auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -54,7 +55,7 @@ class AuthController extends GetxController {
         //devtools.log(userCredentials.user!.uid.toString());
 
         final dawnloadUrlOfProfilePic =
-        await StorageMethods().uploadImageToStorage(
+            await StorageMethods().uploadImageToStorage(
           childName: "Profile Pics",
           file: file,
           isPost: false,
@@ -80,23 +81,23 @@ class AuthController extends GetxController {
 
       return res;
     } on FirebaseAuthException catch (e) {
-   //   devtools.log(e.toString());
+      //   devtools.log(e.toString());
       if (e.code == 'weak-password') {
-       // devtools.log('The password provided is too weak.');
+        // devtools.log('The password provided is too weak.');
         await showErrorDialog(
           context,
           "Weak Password",
           "The password provided is too weak.",
         );
       } else if (e.code == 'email-already-in-use') {
-       // devtools.log('The account already exists for that email.');
+        // devtools.log('The account already exists for that email.');
         await showErrorDialog(
           context,
           "Email Already in Use",
           "The account already exists for that email.",
         );
       } else if (e.code == "invalid-email") {
-       // devtools.log("Invalid Email Address");
+        // devtools.log("Invalid Email Address");
         await showErrorDialog(
           context,
           "Invalid Email Address",
@@ -110,9 +111,11 @@ class AuthController extends GetxController {
       return res;
     }
   }
-  Future<void> login(String email, password) async {
+
+  Future<String> login(String email, password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
+      return "success";
     } catch (e) {
       Get.snackbar("About Login", "Login messsage",
           backgroundColor: Colors.redAccent,
@@ -120,6 +123,7 @@ class AuthController extends GetxController {
               Text("Login failed", style: TextStyle(color: Colors.white)),
           messageText:
               Text(e.toString(), style: TextStyle(color: Colors.white)));
+      return "failed";
     }
   }
 

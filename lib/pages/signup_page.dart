@@ -11,6 +11,7 @@ import 'package:login/auth_controller.dart';
 import 'package:login/pages/profile_page.dart';
 import 'package:login/pages/welcome_page.dart';
 
+import '../utils/show_error_dialog.dart';
 import '../utils/show_snackbar.dart';
 import '../utils/utils.dart';
 
@@ -65,6 +66,9 @@ class _SignUpPageState extends State<SignUpPage> {
         setState(() {
           isLoading = false;
         });
+      } else {
+        showErrorDialog(
+            context, "Add image", "Please add image to proced for sign up");
       }
     }
 
@@ -223,15 +227,21 @@ class _SignUpPageState extends State<SignUpPage> {
                 borderRadius: BorderRadius.circular(30),
                 image: DecorationImage(
                     image: AssetImage("img/loginbtn.png"), fit: BoxFit.fill)),
-            child: Center(
-              child: Text(
-                "Sign up",
-                style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ),
+            child: isLoading == false
+                ? Center(
+                    child: Text(
+                      "Sign up",
+                      style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
           ),
         ),
         SizedBox(
