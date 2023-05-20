@@ -6,6 +6,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:slide_to_act/slide_to_act.dart';
+
 /// Screen to choose photos and add a new feed post.
 
 class AddPostScreen extends StatefulWidget {
@@ -38,6 +39,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     );
     setState(() {});
   }
+
   void _setLoading(bool state, {bool shouldCallSetState = true}) {
     if (loading != state) {
       loading = state;
@@ -46,6 +48,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       }
     }
   }
+
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -74,6 +77,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
     return true;
   }
+
   Future<void> _getCurrentPosition() async {
     final hasPermission = await _handleLocationPermission();
 
@@ -86,14 +90,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
       debugPrint(e);
     });
   }
+
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(
-        _currentPosition!.latitude, _currentPosition!.longitude)
+            _currentPosition!.latitude, _currentPosition!.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
         _currentAddress =
-        '${place.name},${place.street}, ${place.subLocality},${place.locality}, ${place.subAdministrativeArea},${place.administrativeArea} ,${place.country},${place.postalCode}';
+            '${place.name},${place.street}, ${place.subLocality},${place.locality}, ${place.subAdministrativeArea},${place.administrativeArea} ,${place.country},${place.postalCode}';
         //KRN Complex,KRN Complex, NSTL,Visakhapatnam, ,Andhra Pradesh ,India,530009
         print(_currentAddress);
       });
@@ -111,127 +116,125 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      ),
       body: loading
           ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            CircularProgressIndicator(),
-            SizedBox(height: 12),
-            Text('Uploading...')
-          ],
-        ),
-      )
-          : Column(
-        children:  <Widget>[
-          Expanded(
-            flex: 4,
-            child: InkWell(
-              onTap: _pickFile,
-              child: Expanded(
-                child: (_pickedFile != null)
-                    ? FadeInImage(
-                  fit: BoxFit.contain,
-                  placeholder: MemoryImage(kTransparentImage),
-                  image: Image.file(File(_pickedFile!.path)).image,
-                )
-                    : Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        colors: [
-                          AppColors.bottomGradient,
-                          AppColors.topGradient
-                        ]),
-                  ),
-                  height: 300,
-                  child: const Center(
-                    child: Text(
-                      'Tap to select an image',
-                      style: TextStyle(
-                        color: AppColors.light,
-                        fontSize: 18,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: Offset(2.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Colors.black54,
-                          ),
-                          Shadow(
-                            offset: Offset(1.0, 1.5),
-                            blurRadius: 5.0,
-                            color: Colors.black54,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 12),
+                  Text('Uploading...')
+                ],
               ),
-            ),
-          ),
-
-          Expanded(
-            flex: 4,
-            child:  Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:  <Widget>[
+            )
+          : Column(
+              children: <Widget>[
                 Expanded(
                   flex: 4,
-                  child:Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: _text,
-                        decoration: const InputDecoration(
-                          hintText: 'Write a caption',
-                          border: InputBorder.none,
-                        ),
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'Caption is empty';
-                          }
-                          return null;
-                        },
-                      ),
+                  child: InkWell(
+                    onTap: _pickFile,
+                    child: Expanded(
+                      child: (_pickedFile != null)
+                          ? FadeInImage(
+                              fit: BoxFit.contain,
+                              placeholder: MemoryImage(kTransparentImage),
+                              image: Image.file(File(_pickedFile!.path)).image,
+                            )
+                          : Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.bottomLeft,
+                                    end: Alignment.topRight,
+                                    colors: [
+                                      AppColors.bottomGradient,
+                                      AppColors.topGradient
+                                    ]),
+                              ),
+                              height: 300,
+                              child: const Center(
+                                child: Text(
+                                  'Tap to select an image',
+                                  style: TextStyle(
+                                    color: AppColors.light,
+                                    fontSize: 18,
+                                    shadows: <Shadow>[
+                                      Shadow(
+                                        offset: Offset(2.0, 1.0),
+                                        blurRadius: 3.0,
+                                        color: Colors.black54,
+                                      ),
+                                      Shadow(
+                                        offset: Offset(1.0, 1.5),
+                                        blurRadius: 5.0,
+                                        color: Colors.black54,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                 ),
                 Expanded(
                   flex: 4,
-                  child:  Text('ADDRESS: ${_currentAddress ?? ""}', textAlign: TextAlign.left,),),
-
-
-                Expanded(
-                  flex: 4,
-
-                  child: SlideAction(
-                      key:slideActionKey,
-                      innerColor: Colors.blue,
-                      outerColor: Colors.blue [200],
-                      text: 'Slide to Post',
-                      textStyle: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ), // TextStyle
-                      sliderRotate: false,
-
-                      onSubmit:(){
-                        Future.delayed(const Duration(seconds: 3), () {
-                          slideActionKey.currentState!.reset();
-                        });
-                      }
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 4,
+                        child: Form(
+                          key: _formKey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: _text,
+                              decoration: const InputDecoration(
+                                hintText: 'Write a caption',
+                                border: InputBorder.none,
+                              ),
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return 'Caption is empty';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          'ADDRESS: ${_currentAddress ?? ""}',
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: SlideAction(
+                            key: slideActionKey,
+                            innerColor: Colors.blue,
+                            outerColor: Colors.blue[200],
+                            text: 'Slide to Post',
+                            textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            ), // TextStyle
+                            sliderRotate: false,
+                            onSubmit: () {
+                              Future.delayed(const Duration(seconds: 3), () {
+                                slideActionKey.currentState!.reset();
+                              });
+                            }
 // do // SlideAction
-                  ), ),
-              ],),
-          ),
-
-        ],
-      ),
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }

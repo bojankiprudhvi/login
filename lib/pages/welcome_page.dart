@@ -20,7 +20,7 @@ class WelcomePage extends StatefulWidget {
   State<WelcomePage> createState() => _WelcomePageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
+/*class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -64,10 +64,95 @@ class _WelcomePageState extends State<WelcomePage> {
                 GButton(
                   icon: Icons.image,
                   // text: " ",
-                ),
+                 ),
                 GButton(icon: Icons.person, text: ""),
               ]),
         ),
+      ),
+    );
+  }
+}
+
+*/
+class _WelcomePageState extends State<WelcomePage> {
+  int _counter = 0;
+  bool isTravel = true;
+  var AppColor = Colors.green;
+  int _selectedIndex = 0;
+  static const List<Widget> _widgetOptions = <Widget>[
+    FeedScreen(),
+    WishList(),
+    AddPostScreen(),
+    UserPostList(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: GestureDetector(
+            // Wrap the AppBar widget with GestureDetector
+            onDoubleTap: () {
+              // Handle double tap event
+              setState(() {
+                // Change the color of the app bar
+                if (isTravel) {
+                  AppColor = Colors.orange;
+                  isTravel = false;
+                } else {
+                  AppColor = Colors.green;
+                  isTravel = true;
+                }
+              });
+            },
+            child: AppBar(
+              title: Text('Hi Prudhvi'),
+              backgroundColor: AppColor, // Use the color variable
+            ),
+          ),
+        ),
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: AppColor,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                //  title: Text('Home'),
+                label: "FeedScreen",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                //  title: Text('Home'),
+                label: "WishList",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.add),
+                label: "AddPostScreen",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                //title: Text('Profile'),
+                label: "UserPostList",
+              ),
+            ],
+            //type: BottomNavigationBarType.shifting,
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.black,
+            iconSize: 40,
+            onTap: _onItemTapped,
+            type: BottomNavigationBarType.fixed,
+            elevation: 5),
       ),
     );
   }
